@@ -5,6 +5,7 @@ import java.util.Date;
 /**
  * @author Viktar on 27.05.2020
  */
+
 public class User {
 
     private Integer id;
@@ -18,4 +19,12 @@ public class User {
     private String email;
 
     private Date created_at;
+
+    public String getFirst_name() {
+        return first_name;
+    }
+
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
 }
