@@ -1,5 +1,6 @@
 package com.leverx.learn.blogme;
 
+import com.leverx.learn.blogme.config.DatabaseConfig;
 import com.leverx.learn.blogme.config.WebConfig;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -11,7 +12,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[]{WebConfig.class};
+        return new Class[]{WebConfig.class, DatabaseConfig.class};
     }
 
     @Override
