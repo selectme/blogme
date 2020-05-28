@@ -1,5 +1,6 @@
 package com.leverx.learn.blogme.config;
 
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -36,9 +37,8 @@ public class DatabaseConfig {
     private String DATABASE_USERNAME;
     @Value("${db.password}")
     private String DATABASE_PASSWORD;
-    @Value("${db.entity.package}")
-    private String ENTITY_PACKAGE;
 
+    private static final String ENTITY_PACKAGE = "com.leverx.learn.blogme.entity";
     private static final String HIBERNATE_PROPERTIES = "hibernate.properties";
 
 
@@ -54,14 +54,13 @@ public class DatabaseConfig {
 
     @Bean
     public DataSource getDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        BasicDataSource ds = new BasicDataSource();
+        ds.setUrl(DATABASE_URL);
+        ds.setDriverClassName(DATABASE_DRIVER);
+        ds.setUsername(DATABASE_USERNAME);
+        ds.setPassword(DATABASE_PASSWORD);
 
-        dataSource.setDriverClassName(DATABASE_DRIVER);
-        dataSource.setUrl(DATABASE_URL);
-        dataSource.setUsername(DATABASE_USERNAME);
-        dataSource.setPassword(DATABASE_PASSWORD);
-
-        return dataSource;
+        return ds;
     }
 
     @Bean
