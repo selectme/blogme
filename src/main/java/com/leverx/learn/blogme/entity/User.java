@@ -1,10 +1,11 @@
 package com.leverx.learn.blogme.entity;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Viktar on 27.05.2020
@@ -33,15 +34,14 @@ public class User {
     @Column(name = "created_at")
     private Date createdAt;
 
-    @OneToMany(targetEntity = Article.class, fetch = FetchType.LAZY, mappedBy = "author")
-    private List<Article> articles;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+    private Set<Article> articles;
 
-    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, mappedBy = "author")
-    private List<Comment> comments;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+    private Set<Comment> comments;
 
     public User() {
     }
-
 
     public Integer getId() {
         return id;
@@ -91,19 +91,19 @@ public class User {
         this.createdAt = createdAt;
     }
 
-    public List<Article> getArticles() {
+    public Set<Article> getArticles() {
         return articles;
     }
 
-    public void setArticles(List<Article> articles) {
+    public void setArticles(Set<Article> articles) {
         this.articles = articles;
     }
 
-    public List<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 }

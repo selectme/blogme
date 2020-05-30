@@ -1,12 +1,11 @@
 package com.leverx.learn.blogme.entity;
 
 import com.leverx.learn.blogme.ArticleStatus;
-import javafx.scene.text.Text;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Viktar on 27.05.2020
@@ -23,20 +22,19 @@ public class Article {
     @Column(name = "title")
     private String title;
 
-    @Lob
-    @Column(name = "text", columnDefinition = "LONGTEXT")
-    private Text text;
+    @Column(name = "text", columnDefinition = "text")
+    private String text;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", columnDefinition = "enum")
     private ArticleStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(targetEntity = Comment.class, fetch = FetchType.LAZY, mappedBy = "article")
-    private List<Comment> comments;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article")
+    private Set<Comment> comments;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -44,11 +42,14 @@ public class Article {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tags_to_posts", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
-    private List<Tag> tags;
+    private Set<Tag> tags;
 
+
+    public Article() {
+    }
 
     public Integer getId() {
         return id;
@@ -66,11 +67,11 @@ public class Article {
         this.title = title;
     }
 
-    public Text getText() {
+    public String getText() {
         return text;
     }
 
-    public void setText(Text text) {
+    public void setText(String text) {
         this.text = text;
     }
 
@@ -106,19 +107,19 @@ public class Article {
         this.updatedAt = updatedAt;
     }
 
-    public List<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<Comment> comments) {
+    public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
+    public void setTags(Set<Tag> tags) {
         this.tags = tags;
     }
 }
