@@ -1,5 +1,6 @@
 package com.leverx.learn.blogme.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -17,10 +18,11 @@ public class Tag {
     @GenericGenerator(name = "increment", strategy = "increment")
     private Integer id;
 
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags", cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Article> articles;
 
 
@@ -49,5 +51,20 @@ public class Tag {
 
     public void setArticles(List<Article> articles) {
         this.articles = articles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Tag tag = (Tag) o;
+
+        return id.equals(tag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

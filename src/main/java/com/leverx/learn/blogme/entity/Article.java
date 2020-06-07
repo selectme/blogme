@@ -2,6 +2,7 @@ package com.leverx.learn.blogme.entity;
 
 import com.leverx.learn.blogme.ArticleStatus;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "posts")
+@Proxy(lazy = false)
 public class Article {
 
     @Id
@@ -29,22 +31,26 @@ public class Article {
     @Column(name = "status", columnDefinition = "enum")
     private ArticleStatus status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+//    @JsonBackReference
+////    @JsonIgnore
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article")
-    private Set<Comment> comments;
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article")
+//    private Set<Comment> comments;
 
     @Column(name = "created_at")
     private Date createdAt;
 
     @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "tags_to_posts", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @JoinTable(name = "tags_to_posts", joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
 
 
@@ -107,19 +113,35 @@ public class Article {
         this.updatedAt = updatedAt;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
+//    public Set<Comment> getComments() {
+//        return comments;
+//    }
+//
+//    public void setComments(Set<Comment> comments) {
+//        this.comments = comments;
+//    }
+//
     public Set<Tag> getTags() {
         return tags;
     }
 
     public void setTags(Set<Tag> tags) {
         this.tags = tags;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Article article = (Article) o;
+
+        return id.equals(article.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

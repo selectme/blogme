@@ -1,5 +1,6 @@
 package com.leverx.learn.blogme.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
@@ -12,6 +13,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "users")
+@Proxy(lazy = false)
 public class User {
 
     @Id
@@ -32,13 +34,19 @@ public class User {
     private String email;
 
     @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+    @Column(name = "is_enabled")
+    private boolean isEnabled;
+
+//    @JsonManagedReference
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private Set<Article> articles;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
-    private Set<Comment> comments;
+//
+//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+//    private Set<Comment> comments;
 
     public User() {
     }
@@ -99,11 +107,29 @@ public class User {
         this.articles = articles;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
+    public boolean isEnabled() {
+        return isEnabled;
     }
 
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!id.equals(user.id)) return false;
+        return email.equals(user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + email.hashCode();
+        return result;
     }
 }

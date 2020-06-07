@@ -2,8 +2,12 @@ package com.leverx.learn.blogme.controller;
 
 import com.leverx.learn.blogme.entity.Article;
 import com.leverx.learn.blogme.service.ArticleService;
+import com.leverx.learn.blogme.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author Viktar on 27.05.2020
@@ -12,8 +16,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/articles")
 public class ArticleController {
 
-    @Autowired
+
     private ArticleService articleService;
+    private TagService tagService;
+
+    @Autowired
+    public ArticleController(ArticleService articleService, TagService tagService) {
+        this.articleService = articleService;
+        this.tagService = tagService;
+    }
 
     @PostMapping
     @ResponseBody
@@ -26,4 +37,24 @@ public class ArticleController {
     public Article getArticle(@PathVariable Integer id) {
         return articleService.getArticleById(id);
     }
+
+    @PutMapping("/{id}")
+    public Article editArticle(@RequestBody Article editedArticle, @PathVariable Integer id) {
+        return articleService.editArticle(editedArticle);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteArticle(@PathVariable Integer id) {
+        articleService.deleteArticle(id);
+    }
+
+    //    @GetMapping()
+//    public List<List<Article>> getArticlesByTags(@RequestParam(value = "tags") List<String> tags){
+//        return articleService.findAllArticlesByTags(tags);
+//    }
+    @GetMapping()
+    public Set<Article> getArticlesByTags(@RequestParam(value = "tags") List<String> tags) {
+        return articleService.findAllArticlesByTags(tags);
+    }
+
 }

@@ -1,30 +1,46 @@
 package com.leverx.learn.blogme.controller;
 
+import com.leverx.learn.blogme.dto.userdto.UserDto;
+import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.entity.User;
+import com.leverx.learn.blogme.service.ActivationCodeService;
 import com.leverx.learn.blogme.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+
+import javax.transaction.Transactional;
 
 /**
  * @author Viktar on 27.05.2020
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping(value = "/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final UserDtoConverter userDtoConverter;
+    private final ActivationCodeService codeService;
 
-    @PostMapping
-    @ResponseBody
-    public User createUser(@RequestBody User user){
-        return userService.addUser(user);
+    public UserController(UserService userService, UserDtoConverter userDtoConverter, ActivationCodeService codeService) {
+        this.userService = userService;
+        this.userDtoConverter = userDtoConverter;
+        this.codeService = codeService;
     }
 
-    @GetMapping("/{id}")
-    public User getUser(@PathVariable Integer id){
-        User userById = userService.getUserById(id);
-        return userById;
 
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public UserDto createUser(@RequestBody UserDto userDto) {
+        User user = userDtoConverter.convertToEntity(userDto);
+        String activationCode = codeService.generateActivationCode(user.getEmail());
+        userService.addUser(user);
+        codeService.activateUserByCode(activationCode);
+        return userDtoConverter.convertToDto(user);
+    }
+
+
+    @GetMapping("/{id}")
+    @Transactional
+    public UserDto getUser(@PathVariable Integer id) {
+        return userDtoConverter.convertToDto(userService.getUserById(id));
     }
 }

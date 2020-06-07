@@ -13,14 +13,21 @@ import java.util.List;
  * @author Viktar on 28.05.2020
  */
 @Service
-
 public class UserServiceImpl implements UserService {
 
-    @Autowired
+
     private UserRepository userRepository;
 
+
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
+    @Transactional
     public User addUser(User user) {
+
         return userRepository.save(user);
     }
 
@@ -44,4 +51,6 @@ public class UserServiceImpl implements UserService {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+
 }
