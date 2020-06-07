@@ -4,6 +4,7 @@ import com.leverx.learn.blogme.dto.userdto.UserDto;
 import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.entity.User;
 import com.leverx.learn.blogme.service.ActivationCodeService;
+import com.leverx.learn.blogme.service.MailService;
 import com.leverx.learn.blogme.service.UserService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,11 +21,13 @@ public class UserController {
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;
     private final ActivationCodeService codeService;
+    private final MailService mailService;
 
-    public UserController(UserService userService, UserDtoConverter userDtoConverter, ActivationCodeService codeService) {
+    public UserController(UserService userService, UserDtoConverter userDtoConverter, ActivationCodeService codeService, MailService mailService) {
         this.userService = userService;
         this.userDtoConverter = userDtoConverter;
         this.codeService = codeService;
+        this.mailService = mailService;
     }
 
 
@@ -33,7 +36,8 @@ public class UserController {
         User user = userDtoConverter.convertToEntity(userDto);
         String activationCode = codeService.generateActivationCode(user.getEmail());
         userService.addUser(user);
-        codeService.activateUserByCode(activationCode);
+        mailService.send(user.getEmail(), "activation link", activationCode);
+
         return userDtoConverter.convertToDto(user);
     }
 
