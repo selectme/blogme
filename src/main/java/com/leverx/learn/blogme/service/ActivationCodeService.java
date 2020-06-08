@@ -6,7 +6,11 @@ package com.leverx.learn.blogme.service;
 
 public interface ActivationCodeService {
 
-    void activateUserByCode(String code);
+    String activateUserByCode(String code);
 
     String generateActivationCode(String email);
+
+    boolean isCodeExists(String code);
+
+    void resetPassword(String confirmationCode, String newPassword);
 }

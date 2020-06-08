@@ -2,12 +2,13 @@ package com.leverx.learn.blogme.controller;
 
 import com.leverx.learn.blogme.dto.userdto.UserDto;
 import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
-import com.leverx.learn.blogme.entity.User;
 import com.leverx.learn.blogme.service.ActivationCodeService;
 import com.leverx.learn.blogme.service.MailService;
 import com.leverx.learn.blogme.service.UserService;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
 
@@ -31,15 +32,15 @@ public class UserController {
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public UserDto createUser(@RequestBody UserDto userDto) {
-        User user = userDtoConverter.convertToEntity(userDto);
-        String activationCode = codeService.generateActivationCode(user.getEmail());
-        userService.addUser(user);
-        mailService.send(user.getEmail(), "activation link", activationCode);
-
-        return userDtoConverter.convertToDto(user);
-    }
+//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public UserDto createUser(@RequestBody UserDto userDto) {
+//        User user = userDtoConverter.convertToEntity(userDto);
+//        String activationCode = codeService.generateActivationCode(user.getEmail());
+//        userService.addUser(user);
+//        mailService.send(user.getEmail(), "activation link", activationCode);
+//
+//        return userDtoConverter.convertToDto(user);
+//    }
 
 
     @GetMapping("/{id}")

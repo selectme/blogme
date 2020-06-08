@@ -33,8 +33,9 @@ public class RedisConfig {
     @Bean
     RedissonSpringCacheManager cacheManager(RedissonClient redissonClient) {
         Map<String, CacheConfig> config = new HashMap<>();
-        // create "testMap" spring cache with ttl = 24 minutes and maxIdleTime = 12 minutes
+//        LocalCachedMapOptions options = LocalCachedMapOptions.defaults().maxIdle(24, TimeUnit.HOURS);
         config.put("activation-codes", new CacheConfig(24*60*1000, 12*60*1000));
+//        config.put("activation-codes", new CacheConfig(24*60*1000, 12*60*1000));
         return new RedissonSpringCacheManager(redissonClient, config);
     }
 }

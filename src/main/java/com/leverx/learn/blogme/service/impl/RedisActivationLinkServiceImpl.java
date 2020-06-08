@@ -24,13 +24,15 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
         Assert.notNull(redissonClient, "redissonClient must not be null");
         Assert.notNull(userRepository, "userRepository must not be null");
 
+//        this.cache = redissonClient.getLocalCachedMap("activation-codes", LocalCachedMapOptions.defaults()));
         this.cache = redissonClient.getMapCache("activation-codes");
+
         this.userRepository = userRepository;
     }
 
 
     @Override
-    public void activateUserByCode(String code) {
+    public String activateUserByCode(String code) {
 
         String email = cache.get(code);
         if (!StringUtils.isEmpty(email)) {
@@ -41,13 +43,14 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
                 }
                 user.setEnabled(true);
                 userRepository.save(user);
+                cache.remove(code);
+                return user.getEmail() + " confirmed";
             } else {
                 throw new IllegalStateException("User was not found by email " + email);
             }
         } else {
             throw new IllegalStateException("Email was not found for code " + code);
         }
-
     }
 
     @Override
@@ -57,4 +60,31 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
 
         return activationCode;
     }
+
+    @Override
+    public boolean isCodeExists(String code) {
+        return cache.containsKey(code);
+    }
+
+    @Override
+    public void resetPassword(String confirmationCode, String newPassword) {
+        if (isCodeExists(confirmationCode)) {
+            String email = cache.get(confirmationCode);
+            if (!StringUtils.isEmpty(email)) {
+                User user = userRepository.findByEmail(email);
+                if (user != null) {
+                    user.setPassword(newPassword);
+                    userRepository.save(user);
+                    cache.remove(confirmationCode);
+                } else {
+                    throw new IllegalStateException("User was not found by email " + email);
+                }
+            } else {
+                throw new IllegalStateException("Email was not found for code " + confirmationCode);
+            }
+        } else {
+            throw new IllegalStateException("Code " + confirmationCode + "is not valid");
+        }
+    }
+
 }
