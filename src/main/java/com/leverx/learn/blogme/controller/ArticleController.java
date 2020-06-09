@@ -48,13 +48,15 @@ public class ArticleController {
         articleService.deleteArticle(id);
     }
 
-    //    @GetMapping()
-//    public List<List<Article>> getArticlesByTags(@RequestParam(value = "tags") List<String> tags){
-//        return articleService.findAllArticlesByTags(tags);
-//    }
-    @GetMapping()
+    @GetMapping(params = "tags")
     public Set<Article> getArticlesByTags(@RequestParam(value = "tags") List<String> tags) {
         return articleService.findAllArticlesByTags(tags);
     }
+
+    @GetMapping()
+    public List<Article> getAllArticles(){
+        return articleService.getAllArticles();
+    }
+
 
 }

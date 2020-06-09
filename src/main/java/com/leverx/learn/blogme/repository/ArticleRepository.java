@@ -16,4 +16,5 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
 //    Article findByTagsContains(Tag tag);
     List<Article> findByTagsContains(Tag tag);
+
 }

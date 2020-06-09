@@ -45,8 +45,9 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private Set<Article> articles;
 //
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
-//    private Set<Comment> comments;
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
+    private Set<Comment> comments;
 
     public User() {
     }
@@ -105,6 +106,14 @@ public class User {
 
     public void setArticles(Set<Article> articles) {
         this.articles = articles;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public boolean isEnabled() {

@@ -1,11 +1,13 @@
 package com.leverx.learn.blogme.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.leverx.learn.blogme.ArticleStatus;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -31,14 +33,13 @@ public class Article {
     @Column(name = "status", columnDefinition = "enum")
     private ArticleStatus status;
 
-//    @JsonBackReference
-////    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article")
-//    private Set<Comment> comments;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "article")
+    @JsonIgnore
+    private List<Comment> comments;
 
     @Column(name = "created_at")
     private Date createdAt;
@@ -113,14 +114,14 @@ public class Article {
         this.updatedAt = updatedAt;
     }
 
-//    public Set<Comment> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(Set<Comment> comments) {
-//        this.comments = comments;
-//    }
-//
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
+    }
+
     public Set<Tag> getTags() {
         return tags;
     }
