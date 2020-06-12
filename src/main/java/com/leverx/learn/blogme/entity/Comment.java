@@ -31,9 +31,9 @@ public class Comment {
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Column(name = "created_at")
+    @Column(name = "createdAt")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date created_at;
+    private Date createdAt;
 
     public Comment() {
     }
@@ -70,11 +70,11 @@ public class Comment {
         this.author = author;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

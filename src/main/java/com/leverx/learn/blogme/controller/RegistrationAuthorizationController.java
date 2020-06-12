@@ -4,23 +4,15 @@ import com.leverx.learn.blogme.dto.authenticationDto.AuthenticationRequestDto;
 import com.leverx.learn.blogme.dto.userdto.UserDto;
 import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.entity.User;
-import com.leverx.learn.blogme.security.jwt.JwtTokenProvider;
-import com.leverx.learn.blogme.service.ActivationCodeService;
-import com.leverx.learn.blogme.service.MailService;
-import com.leverx.learn.blogme.service.RegistrationService;
-import com.leverx.learn.blogme.service.UserService;
+import com.leverx.learn.blogme.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author Viktar on 07.06.2020
@@ -29,38 +21,51 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class RegistrationAuthorizationController {
 
+    private static final String USER_NOT_EMPTY = "User must not be empty";
+    private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
+    private static final String ACTIVATION_CODE_NOT_EMPTY = "Activation code must not be empty";
+    private static final String CODE_NEW_PASSWORD_NOT_EMPTY = "Code and password must not be empty";
+    private static final String EMAIL_SUBJECT = "Activation link";
+    private static final String EMAIL_ACTIVATION_MESSAGE = "http://localhost:8080/auth/confirm/";
+    private static final String FORGOT_PASSWORD_SUBJECT = "Instruction for forgotten password";
+    private static final String FORGOT_PASSWORD_MESSAGE = "User this code for reset password ";
+    private static final String ACTIVATION_CODE_VALID = "Your activation code is valid";
+    private static final String ACTIVATION_CODE_NOT_VALID = "Your activation code is not valid";
+    private static final String LOGIN_PASSWORD_NOT_EMPTY = "Login and password must not be empty";
+
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;
     private final RegistrationService registrationService;
     private final ActivationCodeService codeService;
     private final MailService mailService;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-    private final JwtTokenProvider jwtTokenProvider;
+
+    private final AuthorizationService authorizationService;
 
 
     public RegistrationAuthorizationController(UserService userService, UserDtoConverter userDtoConverter,
                                                RegistrationService registrationService, ActivationCodeService codeService,
                                                MailService mailService, BCryptPasswordEncoder passwordEncoder,
-                                               AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
+                                               AuthorizationService authorizationService) {
         this.userService = userService;
         this.userDtoConverter = userDtoConverter;
         this.registrationService = registrationService;
         this.codeService = codeService;
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
+
+        this.authorizationService = authorizationService;
     }
 
     @PostMapping("/register")
     public UserDto createUser(@RequestBody UserDto userDto) {
+        Assert.notNull(userDto, USER_NOT_EMPTY);
 
         User user = userDtoConverter.convertToEntity(userDto);
         if (userService.getUserByEmail(user.getEmail()) == null) {
             codeService.generateActivationCode(user.getEmail());
             String activationCode = codeService.generateActivationCode(user.getEmail());
-            mailService.send(user.getEmail(), "activation link", "http://localhost:8080/auth/confirm/" + activationCode);
+            mailService.send(user.getEmail(), EMAIL_SUBJECT, EMAIL_ACTIVATION_MESSAGE + activationCode);
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setCreatedAt(new Date());
             userService.addUser(user);
@@ -72,46 +77,47 @@ public class RegistrationAuthorizationController {
 
     @GetMapping("/confirm/{activationCode}")
     public void confirmRegistration(@PathVariable String activationCode) {
+        Assert.notNull(activationCode, ACTIVATION_CODE_NOT_EMPTY);
+
         registrationService.activateUserByConfirmationCode(activationCode);
     }
 
     @PostMapping("/forgot_password")
-    public void forgottenPasswordSendNewCode(@RequestBody String email) {
+    public void forgotPassword(@RequestBody String email) {
+        Assert.notNull(email, EMAIL_NOT_EMPTY);
+
         String code = codeService.generateActivationCode(email);
-        mailService.send(email, "forget password", "Use this code for resetting password: " + code);
+        mailService.send(email, FORGOT_PASSWORD_SUBJECT, FORGOT_PASSWORD_MESSAGE + code);
     }
 
     @PostMapping("/reset")
     public void resetPassword(@RequestBody CodeAndPasswordHolder holder) {
+        Assert.notNull(holder, CODE_NEW_PASSWORD_NOT_EMPTY);
+
         String code = holder.code;
         String password = holder.password;
         codeService.resetPassword(code, passwordEncoder.encode(password));
     }
 
     @GetMapping("/check_code")
-    public ResponseEntity<String> checkCode(@RequestBody String code) {
-        if (codeService.isCodeExists(code)) {
-            return new ResponseEntity<>("Code " + code + " is valid", HttpStatus.OK);
+    public ResponseEntity<String> checkCode(@RequestBody String activationCode) {
+        Assert.notNull(activationCode, ACTIVATION_CODE_NOT_EMPTY);
+
+        if (codeService.isCodeExists(activationCode)) {
+            return new ResponseEntity<>(ACTIVATION_CODE_VALID, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Code " + code + "is not valid", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(ACTIVATION_CODE_NOT_VALID, HttpStatus.BAD_REQUEST);
         }
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto){
-            String username = requestDto.getEmail();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            User user = userService.getUserByEmail(username);
-            if(user == null){
-                throw new UsernameNotFoundException("user " + username + " not found");
-            }
-            String token  = jwtTokenProvider.createToken(username, user.getRoles());
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", username);
-            response.put("token", token);
-            return ResponseEntity.ok(response);
-        }
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+        Assert.notNull(requestDto, LOGIN_PASSWORD_NOT_EMPTY);
+
+        String email = requestDto.getEmail();
+        String password = requestDto.getPassword();
+        return ResponseEntity.ok( authorizationService.login(email, password));
+    }
 
     @Component
     public static class CodeAndPasswordHolder {

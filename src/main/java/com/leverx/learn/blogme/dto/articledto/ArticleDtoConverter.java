@@ -1,20 +1,12 @@
 package com.leverx.learn.blogme.dto.articledto;
 
 import com.leverx.learn.blogme.entity.Article;
-import com.leverx.learn.blogme.service.ArticleService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * @author Viktar on 05.06.2020
  */
 public class ArticleDtoConverter {
 
-    private ArticleService articleService;
-
-    @Autowired
-    public ArticleDtoConverter(ArticleService articleService) {
-        this.articleService = articleService;
-    }
 
     public ArticleDto convertToDto(Article article) {
 

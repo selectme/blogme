@@ -1,7 +1,6 @@
 package com.leverx.learn.blogme.controller;
 
 import com.leverx.learn.blogme.service.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +13,8 @@ import java.util.Map;
 @RestController
 public class TagController {
 
-    private TagService tagService;
+    private final TagService tagService;
 
-    @Autowired
     public TagController(TagService tagService) {
         this.tagService = tagService;
     }

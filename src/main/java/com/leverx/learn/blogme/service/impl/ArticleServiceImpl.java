@@ -35,6 +35,7 @@ public class ArticleServiceImpl implements ArticleService {
     //todo article dto
     @Transactional
     public Article addArticle(Article article) {
+
         Set<Tag> postTags = article.getTags();
         if (postTags != null) {
             Set<Tag> tagsToBeSaved = new HashSet<>();
@@ -82,7 +83,6 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    //todo List<String> tags to Set
     public Set<Article> findAllArticlesByTags(List<String> tags) {
 
         Assert.notEmpty(tags, "tags must not be empty");
