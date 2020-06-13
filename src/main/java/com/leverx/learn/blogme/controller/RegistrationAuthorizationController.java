@@ -12,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-
 /**
  * @author Viktar on 07.06.2020
  */
@@ -25,8 +23,7 @@ public class RegistrationAuthorizationController {
     private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
     private static final String ACTIVATION_CODE_NOT_EMPTY = "Activation code must not be empty";
     private static final String CODE_NEW_PASSWORD_NOT_EMPTY = "Code and password must not be empty";
-    private static final String EMAIL_SUBJECT = "Activation link";
-    private static final String EMAIL_ACTIVATION_MESSAGE = "http://localhost:8080/auth/confirm/";
+
     private static final String FORGOT_PASSWORD_SUBJECT = "Instruction for forgotten password";
     private static final String FORGOT_PASSWORD_MESSAGE = "User this code for reset password ";
     private static final String ACTIVATION_CODE_VALID = "Your activation code is valid";
@@ -58,21 +55,10 @@ public class RegistrationAuthorizationController {
     }
 
     @PostMapping("/register")
-    public UserDto createUser(@RequestBody UserDto userDto) {
-        Assert.notNull(userDto, USER_NOT_EMPTY);
+    public UserDto createUser(@RequestBody User user) {
+        Assert.notNull(user, USER_NOT_EMPTY);
 
-        User user = userDtoConverter.convertToEntity(userDto);
-        if (userService.getUserByEmail(user.getEmail()) == null) {
-            codeService.generateActivationCode(user.getEmail());
-            String activationCode = codeService.generateActivationCode(user.getEmail());
-            mailService.send(user.getEmail(), EMAIL_SUBJECT, EMAIL_ACTIVATION_MESSAGE + activationCode);
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setCreatedAt(new Date());
-            userService.addUser(user);
-        } else {
-            throw new IllegalStateException("Email " + user.getEmail() + " has already registered");
-        }
-        return userDtoConverter.convertToDto(user);
+        return userDtoConverter.convertToDto(registrationService.registerUser(user));
     }
 
     @GetMapping("/confirm/{activationCode}")
@@ -116,7 +102,7 @@ public class RegistrationAuthorizationController {
 
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();
-        return ResponseEntity.ok( authorizationService.login(email, password));
+        return ResponseEntity.ok(authorizationService.login(email, password));
     }
 
     @Component

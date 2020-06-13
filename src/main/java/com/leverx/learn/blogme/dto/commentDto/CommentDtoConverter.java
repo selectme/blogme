@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
  * @author Viktar on 12.06.2020
  */
 @Component
-public class commentDtoConverter {
+public class CommentDtoConverter {
 
     private final UserService userService;
 
-    public commentDtoConverter(UserService userService) {
+    public CommentDtoConverter(UserService userService) {
         this.userService = userService;
     }
 

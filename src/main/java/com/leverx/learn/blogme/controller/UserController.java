@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.transaction.Transactional;
-
 /**
  * @author Viktar on 27.05.2020
  */
@@ -32,19 +30,7 @@ public class UserController {
     }
 
 
-//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-//    public UserDto createUser(@RequestBody UserDto userDto) {
-//        User user = userDtoConverter.convertToEntity(userDto);
-//        String activationCode = codeService.generateActivationCode(user.getEmail());
-//        userService.addUser(user);
-//        mailService.send(user.getEmail(), "activation link", activationCode);
-//
-//        return userDtoConverter.convertToDto(user);
-//    }
-
-
     @GetMapping("/{id}")
-    @Transactional
     public UserDto getUser(@PathVariable Integer id) {
         return userDtoConverter.convertToDto(userService.getUserById(id));
     }

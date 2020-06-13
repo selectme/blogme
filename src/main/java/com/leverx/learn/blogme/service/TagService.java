@@ -22,9 +22,5 @@ public interface TagService {
 
     Map<String, Long> getTagCloud();
 
-    boolean existsByName(String name);
-
-    void saveAll(Set<Tag> tags);
-
     Tag findByName(String tagName);
 }

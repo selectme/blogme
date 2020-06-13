@@ -1,5 +1,7 @@
 package com.leverx.learn.blogme.controller;
 
+import com.leverx.learn.blogme.dto.articledto.ArticleDto;
+import com.leverx.learn.blogme.dto.articledto.ArticleDtoConverter;
 import com.leverx.learn.blogme.entity.Article;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.TagService;
@@ -22,35 +24,37 @@ public class ArticleController {
 
     private final ArticleService articleService;
     private final TagService tagService;
+    private final ArticleDtoConverter articleDtoConverter;
 
-    public ArticleController(ArticleService articleService, TagService tagService) {
+    public ArticleController(ArticleService articleService, TagService tagService, ArticleDtoConverter articleDtoConverter) {
         this.articleService = articleService;
         this.tagService = tagService;
+        this.articleDtoConverter = articleDtoConverter;
     }
 
 
     @PostMapping
     @ResponseBody
-    public Article addArticle(@RequestBody Article article) {
+    public ArticleDto addArticle(@RequestBody Article article) {
         Assert.notNull(article, ARTICLE_NOT_EMPTY);
 
-        return articleService.addArticle(article);
+        return articleDtoConverter.convertToDto(articleService.addArticle(article));
     }
 
     @GetMapping("/{id}")
     @ResponseBody
-    public Article getArticle(@PathVariable Integer id) {
+    public ArticleDto getArticle(@PathVariable Integer id) {
         Assert.notNull(id, ID_NOT_EMPTY);
 
-        return articleService.getArticleById(id);
+        return articleDtoConverter.convertToDto(articleService.getArticleById(id));
     }
 
     @PutMapping("/{id}")
-    public Article editArticle(@RequestBody Article editedArticle, @PathVariable Integer id) {
+    public ArticleDto editArticle(@RequestBody Article editedArticle, @PathVariable Integer id) {
         Assert.notNull(editedArticle, ARTICLE_NOT_EMPTY);
         Assert.notNull(id, ID_NOT_EMPTY);
 
-        return articleService.editArticle(editedArticle);
+        return articleDtoConverter.convertToDto(articleService.editArticle(editedArticle));
     }
 
     @DeleteMapping("/{id}")

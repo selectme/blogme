@@ -45,8 +45,6 @@ public class TagServiceImpl implements TagService {
         repository.delete(tag);
     }
 
-
-
     @Override
     public Set<Tag> getAllTags() {
         return (Set<Tag>) repository.findAll();
