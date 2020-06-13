@@ -1,4 +1,4 @@
-package com.leverx.learn.blogme.entity;
+package com.leverx.learn.blogme;
 
 /**
  * @author Viktar on 27.05.2020

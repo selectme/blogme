@@ -13,7 +13,7 @@ import java.util.Map;
 @RestController
 public class TagController {
 
-    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be empty";
+    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be null";
 
     private final TagService tagService;
 

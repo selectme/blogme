@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     private static final String ID_NOT_EMPTY = "Id must not be empty";
-    private static final String USER_SERVICE_NOT_EMPTY = "userService must not be empty";
-    private static final String USER_DTO_CONVERTER_NOT_EMPTY = "userDtoConverter must not be empty";
-    private static final String CODE_SERVICE_NOT_EMPTY = "codeService must not be empty";
-    private static final String MAIL_SERVICE_NOT_EMPTY = "mailService must not be empty";
+    private static final String USER_SERVICE_NOT_EMPTY = "userService must not be null";
+    private static final String USER_DTO_CONVERTER_NOT_EMPTY = "userDtoConverter must not be null";
+    private static final String CODE_SERVICE_NOT_EMPTY = "codeService must not be null";
+    private static final String MAIL_SERVICE_NOT_EMPTY = "mailService must not be null";
 
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;

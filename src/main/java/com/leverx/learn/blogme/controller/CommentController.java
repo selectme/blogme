@@ -18,8 +18,8 @@ public class CommentController {
 
     private static final String ARTICLE_ID_NOT_EMPTY = "Article id must not be empty";
     private static final String COMMENT_ID_NOT_EMPTY = "Id must not be empty";
-    private static final String COMMENT_SERVICE_NOT_EMPTY = "commentService must not be empty";
-    private static final String COMMENT_DTO_CONVERTER_NOT_EMPTY = "commentDtoConverter must not be empty";
+    private static final String COMMENT_SERVICE_NOT_EMPTY = "commentService must not be null";
+    private static final String COMMENT_DTO_CONVERTER_NOT_EMPTY = "commentDtoConverter must not be null";
 
     private final CommentService commentService;
     private final CommentDtoConverter commentDtoConverter;

@@ -22,13 +22,18 @@ public class ArticleServiceImpl implements ArticleService {
 
     private static final String ARTICLE_NOT_EMPTY = "Article must not be empty";
     private static final String ID_NOT_EMPTY = "Id must not be empty";
-   private static final String TAGS_NOT_EMPTY = "Tags must not be empty";
+    private static final String TAGS_NOT_EMPTY = "Tags must not be empty";
+    private static final String ARTICLE_REPOSITORY_NOT_EMPTY = "articleRepository must not be null";
+    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be null";
 
     private final ArticleRepository articleRepository;
     private final TagService tagService;
 
 
     public ArticleServiceImpl(ArticleRepository articleRepository, TagService tagService) {
+        Assert.notNull(articleRepository, ARTICLE_REPOSITORY_NOT_EMPTY);
+        Assert.notNull(tagService, TAG_SERVICE_NOT_EMPTY);
+
         this.articleRepository = articleRepository;
         this.tagService = tagService;
     }

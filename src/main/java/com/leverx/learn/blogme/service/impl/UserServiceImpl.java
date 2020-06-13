@@ -18,10 +18,13 @@ public class UserServiceImpl implements UserService {
     private static final String USER_NOT_EMPTY = "User must not be empty";
     private static final String ID_NOT_EMPTY = "Id must not be empty";
     private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
+    private static final String USER_REPOSITORY_NOT_EMPTY = "userRepository must not be null";
 
     private final UserRepository userRepository;
 
     public UserServiceImpl(UserRepository userRepository) {
+        Assert.notNull(userRepository, USER_REPOSITORY_NOT_EMPTY);
+
         this.userRepository = userRepository;
     }
 

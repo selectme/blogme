@@ -1,6 +1,6 @@
 package com.leverx.learn.blogme.dto.articledto;
 
-import com.leverx.learn.blogme.entity.ArticleStatus;
+import com.leverx.learn.blogme.ArticleStatus;
 import com.leverx.learn.blogme.entity.User;
 
 import java.util.Date;

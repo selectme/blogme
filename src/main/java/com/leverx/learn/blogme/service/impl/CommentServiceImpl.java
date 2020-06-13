@@ -18,12 +18,19 @@ public class CommentServiceImpl implements CommentService {
 
     private static final String ARTICLE_ID_NOT_EMPTY = "Article id must not be empty";
     private static final String COMMENT_ID_NOT_EMPTY = "Id must not be empty";
+    private static final String ARTICLE_SERVICE_NOT_EMPTY = "articleService must not be null";
+    private static final String COMMENT_REPOSITORY_NOT_EMPTY = "commentRepository must not be null";
+    private static final String ARTICLE_REPOSITORY_NOT_EMPTY = "articleRepository must not be null";
 
     private final ArticleService articleService;
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
 
     public CommentServiceImpl(ArticleService articleService, CommentRepository commentRepository, ArticleRepository articleRepository) {
+        Assert.notNull(articleService, ARTICLE_SERVICE_NOT_EMPTY);
+        Assert.notNull(commentRepository, COMMENT_REPOSITORY_NOT_EMPTY);
+        Assert.notNull(articleRepository, ARTICLE_REPOSITORY_NOT_EMPTY);
+
         this.articleService = articleService;
         this.commentRepository = commentRepository;
         this.articleRepository = articleRepository;

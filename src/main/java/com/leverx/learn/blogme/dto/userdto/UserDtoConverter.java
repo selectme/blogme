@@ -21,9 +21,7 @@ public class UserDtoConverter {
         userDto.setArticles(user.getArticles());
         userDto.setEnabled(user.isEnabled());
         return userDto;
-
     }
-
 
     public User convertToEntity(UserDto userDto) {
 

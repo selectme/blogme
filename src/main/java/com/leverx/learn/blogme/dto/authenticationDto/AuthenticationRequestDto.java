@@ -1,8 +1,11 @@
 package com.leverx.learn.blogme.dto.authenticationDto;
 
+import org.springframework.stereotype.Component;
+
 /**
  * @author Viktar on 09.06.2020
  */
+@Component
 public class AuthenticationRequestDto {
 
     private String email;

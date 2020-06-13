@@ -17,10 +17,13 @@ import java.util.Map;
 public class TagServiceImpl implements TagService {
 
     private static final String TAG_NAME_NOT_EMPTY = "Tag name must not be empty";
+    private static final String TAG_REPOSITORY_NOT_EMPTY = "tagRepository must not be null";
 
     private final TagRepository repository;
 
     public TagServiceImpl(TagRepository repository) {
+        Assert.notNull(repository, TAG_REPOSITORY_NOT_EMPTY);
+
         this.repository = repository;
     }
 

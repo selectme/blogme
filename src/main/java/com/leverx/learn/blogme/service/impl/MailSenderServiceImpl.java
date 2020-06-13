@@ -16,10 +16,13 @@ public class MailSenderServiceImpl implements MailService {
     private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
     private static final String SUBJECT_NOT_EMPTY = "Subject must not be empty";
     private static final String MESSAGE_NOT_EMPTY = "Message must not be empty";
+    private static final String MAIL_SENDER_NOT_EMPTY = "Message must not be null";
 
     private final JavaMailSender javaMailSender;
 
     public MailSenderServiceImpl(JavaMailSender javaMailSender) {
+        Assert.notNull(javaMailSender, MAIL_SENDER_NOT_EMPTY);
+
         this.javaMailSender = javaMailSender;
     }
 
