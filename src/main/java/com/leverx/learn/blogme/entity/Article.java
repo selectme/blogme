@@ -12,6 +12,8 @@ import java.util.Set;
 
 /**
  * @author Viktar on 27.05.2020
+ *
+ * Model object that represents a blog's article.
  */
 @Entity
 @Table(name = "posts")
@@ -29,10 +31,16 @@ public class Article {
     @Column(name = "text", columnDefinition = "text")
     private String text;
 
+    /**
+     * Status of an article. Possible values are PUBLIC and DRAFT.
+     */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", columnDefinition = "enum")
+    @Column(name = "status")
     private ArticleStatus status;
 
+    /**
+     * Author {@link User} of an article.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;

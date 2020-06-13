@@ -5,6 +5,8 @@ import com.leverx.learn.blogme.entity.Tag;
 import com.leverx.learn.blogme.repository.ArticleRepository;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.TagService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -109,5 +111,11 @@ public class ArticleServiceImpl implements ArticleService {
             }
         }
         return articles;
+    }
+
+    @Override
+    public List<Article> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
+        Slice<Article> articleSlice = articleRepository.findByTitleAndAndAuthorId(postTitle, authorId, pageable);
+        return articleSlice.getContent();
     }
 }

@@ -5,6 +5,8 @@ import com.leverx.learn.blogme.repository.ArticleRepository;
 import com.leverx.learn.blogme.repository.CommentRepository;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.CommentService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -62,5 +64,11 @@ public class CommentServiceImpl implements CommentService {
         Assert.notNull(commentId, COMMENT_ID_NOT_EMPTY);
 
         commentRepository.deleteById(commentId);
+    }
+
+    @Override
+    public List<Comment> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
+        Slice<Comment> commentSlice = commentRepository.findByArticleAndAuthorId(postTitle, authorId, pageable);
+        return commentSlice.getContent();
     }
 }

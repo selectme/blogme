@@ -10,6 +10,8 @@ import java.util.Set;
 
 /**
  * @author Viktar on 27.05.2020
+ *
+ * Model object that represents a user.
  */
 @Entity
 @Table(name = "users")

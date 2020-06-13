@@ -8,6 +8,8 @@ import java.util.List;
 
 /**
  * @author Viktar on 27.05.2020
+ *
+ * Model object that represents a tag under an article {@link Article}
  */
 @Entity
 @Table(name = "tags")

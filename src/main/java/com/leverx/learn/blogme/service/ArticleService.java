@@ -1,6 +1,7 @@
 package com.leverx.learn.blogme.service;
 
 import com.leverx.learn.blogme.entity.Article;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Set;
@@ -22,4 +23,5 @@ public interface ArticleService {
 
     Set<Article> findAllArticlesByTags(List<String> tagNames);
 
+    List<Article> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
 }

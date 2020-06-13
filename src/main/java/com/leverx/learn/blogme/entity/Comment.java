@@ -8,6 +8,8 @@ import java.util.Date;
 
 /**
  * @author Viktar on 27.05.2020
+ *
+ * Model object that represent a commentary under an article {@link Article}
  */
 @Entity
 @Table(name = "comments")
@@ -23,10 +25,16 @@ public class Comment {
     private String text;
 
 
+    /**
+     * {@link Article}
+     */
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
     private Article article;
 
+    /**
+     * Author {@link User} of comment.
+     */
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "author_id")
     private User author;
