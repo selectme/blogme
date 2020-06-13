@@ -25,7 +25,6 @@ public class Tag {
     @JsonIgnore
     private List<Article> articles;
 
-
     public Tag() {
     }
 

@@ -1,6 +1,7 @@
 package com.leverx.learn.blogme.controller;
 
 import com.leverx.learn.blogme.service.TagService;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,9 +13,13 @@ import java.util.Map;
 @RestController
 public class TagController {
 
+    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be empty";
+
     private final TagService tagService;
 
     public TagController(TagService tagService) {
+        Assert.notNull(tagService, TAG_SERVICE_NOT_EMPTY);
+
         this.tagService = tagService;
     }
 

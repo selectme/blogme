@@ -40,11 +40,10 @@ public class User {
     @Column(name = "is_enabled")
     private boolean isEnabled;
 
-    //    @JsonManagedReference
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private Set<Article> articles;
-    //
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private Set<Comment> comments;

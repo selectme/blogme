@@ -11,10 +11,6 @@ import java.util.List;
  */
 public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
-
-    //    Article findByTagsContains(String name);
-
-//    Article findByTagsContains(Tag tag);
     List<Article> findByTagsContains(Tag tag);
 
 }

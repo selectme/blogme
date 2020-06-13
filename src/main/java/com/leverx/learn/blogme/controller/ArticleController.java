@@ -21,12 +21,19 @@ public class ArticleController {
     private static final String ID_NOT_EMPTY = "Id must not be empty";
     private static final String ARTICLE_NOT_EMPTY = "Article must not be empty";
     private static final String TAG_NOT_EMPTY = "Tags must not be empty";
+    private static final String ARTICLE_SERVICE_NOT_EMPTY = "articleService must not be empty";
+    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be empty";
+    private static final String ARTICLE_DTO_CONVERTER_NOT_EMPTY = "articleDtoConverter must not be empty";
 
     private final ArticleService articleService;
     private final TagService tagService;
     private final ArticleDtoConverter articleDtoConverter;
 
     public ArticleController(ArticleService articleService, TagService tagService, ArticleDtoConverter articleDtoConverter) {
+        Assert.notNull(articleService, ARTICLE_SERVICE_NOT_EMPTY);
+        Assert.notNull(tagService, TAG_SERVICE_NOT_EMPTY);
+        Assert.notNull(articleDtoConverter, ARTICLE_DTO_CONVERTER_NOT_EMPTY);
+
         this.articleService = articleService;
         this.tagService = tagService;
         this.articleDtoConverter = articleDtoConverter;

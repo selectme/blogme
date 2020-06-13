@@ -4,7 +4,7 @@ import com.leverx.learn.blogme.dto.commentDto.CommentDto;
 import com.leverx.learn.blogme.dto.commentDto.CommentDtoConverter;
 import com.leverx.learn.blogme.entity.Comment;
 import com.leverx.learn.blogme.service.CommentService;
-import io.jsonwebtoken.lang.Assert;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,11 +18,16 @@ public class CommentController {
 
     private static final String ARTICLE_ID_NOT_EMPTY = "Article id must not be empty";
     private static final String COMMENT_ID_NOT_EMPTY = "Id must not be empty";
+    private static final String COMMENT_SERVICE_NOT_EMPTY = "commentService must not be empty";
+    private static final String COMMENT_DTO_CONVERTER_NOT_EMPTY = "commentDtoConverter must not be empty";
 
     private final CommentService commentService;
     private final CommentDtoConverter commentDtoConverter;
 
     public CommentController(CommentService commentService, CommentDtoConverter commentDtoConverter) {
+        Assert.notNull(commentService, COMMENT_SERVICE_NOT_EMPTY);
+        Assert.notNull(commentDtoConverter, COMMENT_DTO_CONVERTER_NOT_EMPTY);
+
         this.commentService = commentService;
         this.commentDtoConverter = commentDtoConverter;
     }

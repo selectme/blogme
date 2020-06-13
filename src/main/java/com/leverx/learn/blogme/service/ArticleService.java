@@ -21,6 +21,5 @@ public interface ArticleService {
     List<Article> getAllArticles();
 
     Set<Article> findAllArticlesByTags(List<String> tagNames);
-//    List<List<Article>> findAllArticlesByTags(List<String> tagNames);
 
 }

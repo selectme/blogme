@@ -30,6 +30,16 @@ public class RegistrationAuthorizationController {
     private static final String ACTIVATION_CODE_NOT_VALID = "Your activation code is not valid";
     private static final String LOGIN_PASSWORD_NOT_EMPTY = "Login and password must not be empty";
 
+    private static final String USER_SERVICE_NOT_EMPTY = "userService must not be empty";
+    private static final String USER_DTO_CONVERTER_NOT_EMPTY = "userDtoConverter must not be empty";
+    private static final String REGISTRATION_SERVICE_NOT_EMPTY = "registrationService must not be empty";
+    private static final String CODE_SERVICE_NOT_EMPTY = "activationCodeService must not be empty";
+    private static final String MAIL_SERVICE_NOT_EMPTY = "mailService must not be empty";
+    private static final String PASSWORD_ENCODER_NOT_EMPTY = "passwordEncoder must not be empty";
+    private static final String AUTHORIZATION_SERVICE_NOT_EMPTY = "authorizationService must not be empty";
+
+
+
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;
     private final RegistrationService registrationService;
@@ -44,6 +54,14 @@ public class RegistrationAuthorizationController {
                                                RegistrationService registrationService, ActivationCodeService codeService,
                                                MailService mailService, BCryptPasswordEncoder passwordEncoder,
                                                AuthorizationService authorizationService) {
+        Assert.notNull(userService, USER_SERVICE_NOT_EMPTY);
+        Assert.notNull(userDtoConverter, USER_DTO_CONVERTER_NOT_EMPTY);
+        Assert.notNull(registrationService, REGISTRATION_SERVICE_NOT_EMPTY);
+        Assert.notNull(codeService, CODE_SERVICE_NOT_EMPTY);
+        Assert.notNull(mailService, MAIL_SERVICE_NOT_EMPTY);
+        Assert.notNull(passwordEncoder, PASSWORD_ENCODER_NOT_EMPTY);
+        Assert.notNull(authorizationService, AUTHORIZATION_SERVICE_NOT_EMPTY);
+
         this.userService = userService;
         this.userDtoConverter = userDtoConverter;
         this.registrationService = registrationService;

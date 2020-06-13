@@ -1,7 +1,6 @@
 package com.leverx.learn.blogme.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.leverx.learn.blogme.ArticleStatus;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
