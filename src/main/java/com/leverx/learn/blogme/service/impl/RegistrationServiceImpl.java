@@ -62,11 +62,5 @@ public class RegistrationServiceImpl implements RegistrationService {
         }
     }
 
-    @Override
-    public String activateUserByConfirmationCode(String confirmationCode) {
-        Assert.notNull(confirmationCode, CONFIRMATION_CODE_NOT_EMPTY);
-
-        return codeService.activateUserByCode(confirmationCode);
-    }
 
 }

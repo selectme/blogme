@@ -83,7 +83,7 @@ public class RegistrationAuthorizationController {
     public void confirmRegistration(@PathVariable String activationCode) {
         Assert.notNull(activationCode, ACTIVATION_CODE_NOT_EMPTY);
 
-        registrationService.activateUserByConfirmationCode(activationCode);
+        codeService.activateUserByCode(activationCode);
     }
 
     @PostMapping("/forgot_password")
