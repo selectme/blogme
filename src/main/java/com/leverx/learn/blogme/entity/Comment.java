@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.util.Date;
 
 /**
- * @author Viktar on 27.05.2020
- *
  * Model object that represent a commentary under an article {@link Article}
+ *
+ * @author Viktar on 27.05.2020
  */
 @Entity
 @Table(name = "comments")

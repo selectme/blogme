@@ -1,10 +1,10 @@
-package com.leverx.learn.blogme.controller;
+package com.leverx.learn.blogme.rest.controller;
 
-import com.leverx.learn.blogme.dto.commentDto.CommentDto;
-import com.leverx.learn.blogme.dto.commentDto.CommentDtoConverter;
 import com.leverx.learn.blogme.entity.Article;
 import com.leverx.learn.blogme.entity.Comment;
 import com.leverx.learn.blogme.entity.User;
+import com.leverx.learn.blogme.rest.dto.commentDto.CommentDto;
+import com.leverx.learn.blogme.rest.dto.commentDto.CommentDtoConverter;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.CommentService;
 import com.leverx.learn.blogme.service.UserService;
@@ -17,6 +17,8 @@ import java.security.Principal;
 import java.util.List;
 
 /**
+ * REST controller for {@link Comment}.
+ *
  * @author Viktar on 27.05.2020
  */
 @RestController

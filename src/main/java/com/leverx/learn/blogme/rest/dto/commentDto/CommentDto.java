@@ -1,11 +1,11 @@
-package com.leverx.learn.blogme.dto.commentDto;
+package com.leverx.learn.blogme.rest.dto.commentDto;
 
 import java.util.Date;
 
 /**
- * @author Viktar on 12.06.2020
- *
  * Model data transfer object of {@link com.leverx.learn.blogme.entity.Comment}
+ *
+ * @author Viktar on 12.06.2020
  */
 public class CommentDto {
 

@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import java.util.Properties;
 
 /**
+ * Configuration for sending emails.
+ *
  * @author Viktar on 07.06.2020
  */
 @Configuration

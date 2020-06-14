@@ -13,6 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.util.Assert;
 
 /**
+ * Security configuration
+ *
  * @author Viktar on 09.06.2020
  */
 @EnableWebSecurity
@@ -46,7 +48,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/auth/**").permitAll()
-                .antMatchers("/articles").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .addFilter(new JwtTokenFilter(authenticationManagerBean(), tokenProvider));

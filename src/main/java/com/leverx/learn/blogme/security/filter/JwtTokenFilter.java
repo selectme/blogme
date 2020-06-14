@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
+ * Filter checks request for token availability and if it is then tries to authenticate it.
+ *
  * @author Viktar on 09.06.2020
  */
 public class JwtTokenFilter extends BasicAuthenticationFilter {
@@ -23,8 +25,8 @@ public class JwtTokenFilter extends BasicAuthenticationFilter {
 
     public JwtTokenFilter(AuthenticationManager authManager, JwtTokenProvider tokenProvider) {
         super(authManager);
-
         Assert.notNull(tokenProvider, "tokenProvider must not be null");
+
         this.tokenProvider = tokenProvider;
     }
 

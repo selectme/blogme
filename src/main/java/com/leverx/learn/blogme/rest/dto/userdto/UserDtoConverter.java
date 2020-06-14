@@ -1,12 +1,12 @@
-package com.leverx.learn.blogme.dto.userdto;
+package com.leverx.learn.blogme.rest.dto.userdto;
 
 import com.leverx.learn.blogme.entity.User;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Viktar on 31.05.2020
- *
  * Allows to convert {@link User} into {@link UserDto} and vice versa.
+ *
+ * @author Viktar on 31.05.2020
  */
 @Component
 public class UserDtoConverter {

@@ -1,11 +1,11 @@
-package com.leverx.learn.blogme.dto.authenticationDto;
+package com.leverx.learn.blogme.rest.dto.authenticationDto;
 
 import org.springframework.stereotype.Component;
 
 /**
- * @author Viktar on 09.06.2020
- *
  * Model data transfer object that contains parameters for authentication.
+ *
+ * @author Viktar on 09.06.2020
  */
 @Component
 public class AuthenticationRequestDto {

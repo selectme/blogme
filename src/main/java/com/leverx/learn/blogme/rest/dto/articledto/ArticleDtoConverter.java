@@ -1,12 +1,12 @@
-package com.leverx.learn.blogme.dto.articledto;
+package com.leverx.learn.blogme.rest.dto.articledto;
 
 import com.leverx.learn.blogme.entity.Article;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Viktar on 05.06.2020
- *
  * Allows to convert {@link Article} into {@link ArticleDto} and vice versa.
+ *
+ * @author Viktar on 05.06.2020
  */
 @Component
 public class ArticleDtoConverter {

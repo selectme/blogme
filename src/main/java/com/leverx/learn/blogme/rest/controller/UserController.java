@@ -1,7 +1,7 @@
-package com.leverx.learn.blogme.controller;
+package com.leverx.learn.blogme.rest.controller;
 
-import com.leverx.learn.blogme.dto.userdto.UserDto;
-import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
+import com.leverx.learn.blogme.rest.dto.userdto.UserDto;
+import com.leverx.learn.blogme.rest.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.service.ActivationCodeService;
 import com.leverx.learn.blogme.service.MailService;
 import com.leverx.learn.blogme.service.UserService;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * REST controller for {@link com.leverx.learn.blogme.entity.User}.
+ *
  * @author Viktar on 27.05.2020
  */
 @RestController

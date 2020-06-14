@@ -30,9 +30,9 @@ public class MailSenderServiceImpl implements MailService {
 
     @Override
     public void send(String emailTo, String subject, String message){
-        Assert.notNull(emailTo, "emailTo must not be empty");
-        Assert.notNull(subject, "subject must not be empty");
-        Assert.notNull(message, "message must not be empty");
+        Assert.hasText(emailTo, "emailTo must not be empty");
+        Assert.hasText(subject, "subject must not be empty");
+        Assert.hasText(message, "message must not be empty");
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(user);

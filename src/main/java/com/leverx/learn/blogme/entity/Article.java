@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author Viktar on 27.05.2020
- *
  * Model object that represents a blog's article.
+ *
+ * @author Viktar on 27.05.2020
  */
 @Entity
 @Table(name = "posts")
@@ -55,12 +55,10 @@ public class Article {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
 
-
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "tags_to_posts", joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tag> tags;
-
 
     public Article() {
     }

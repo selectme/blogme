@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.Assert;
 
 /**
+ * Redis configuration.
+ *
  * @author Viktar on 06.06.2020
  */
 @Configuration

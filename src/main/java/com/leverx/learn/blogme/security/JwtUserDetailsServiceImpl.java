@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 /**
  * @author Viktar on 09.06.2020
@@ -22,6 +23,8 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Assert.hasText(email, "email must not be empty");
+
         User user = userService.getUserByEmail(email);
         if(user == null){
             throw new UsernameNotFoundException("User " + email + " not found");

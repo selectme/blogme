@@ -30,7 +30,7 @@ public class TagServiceImpl implements TagService {
 
     @Override
     public Tag findByName(String tagName) {
-        Assert.notNull(tagName, "tagName must not be empty");
+        Assert.hasText(tagName, "tagName must not be empty");
 
         return repository.findByName(tagName);
     }

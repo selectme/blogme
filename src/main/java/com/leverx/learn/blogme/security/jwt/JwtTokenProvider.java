@@ -11,8 +11,11 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashSet;
 
 /**
+ * Methods for working with JWTToken.
+ *
  * @author Viktar on 09.06.2020
  */
 @Component
@@ -42,7 +45,7 @@ public class JwtTokenProvider {
 
     public UsernamePasswordAuthenticationToken getAuthentication(String token) {
         String username = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-        return new UsernamePasswordAuthenticationToken(username, null);
+        return new UsernamePasswordAuthenticationToken(username, null, new HashSet<>());
     }
 
     public String resolveToken(HttpServletRequest request) {

@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByEmail(String email) {
-        Assert.notNull(email, "email must not be empty");
+        Assert.hasText(email, "email must not be empty");
 
         return userRepository.findByEmail(email);
     }

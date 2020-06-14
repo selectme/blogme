@@ -1,4 +1,4 @@
-package com.leverx.learn.blogme.dto.articledto;
+package com.leverx.learn.blogme.rest.dto.articledto;
 
 import com.leverx.learn.blogme.entity.ArticleStatus;
 import com.leverx.learn.blogme.entity.User;
@@ -6,9 +6,9 @@ import com.leverx.learn.blogme.entity.User;
 import java.util.Date;
 
 /**
- * @author Viktar on 05.06.2020
- *
  * Model data transfer object of {@link com.leverx.learn.blogme.entity.Article}
+ *
+ * @author Viktar on 05.06.2020
  */
 public class ArticleDto {
 

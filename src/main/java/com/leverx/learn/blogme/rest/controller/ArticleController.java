@@ -1,11 +1,10 @@
-package com.leverx.learn.blogme.controller;
+package com.leverx.learn.blogme.rest.controller;
 
-import com.leverx.learn.blogme.dto.articledto.ArticleDto;
-import com.leverx.learn.blogme.dto.articledto.ArticleDtoConverter;
 import com.leverx.learn.blogme.entity.Article;
-import com.leverx.learn.blogme.entity.ArticleStatus;
 import com.leverx.learn.blogme.entity.Comment;
 import com.leverx.learn.blogme.entity.User;
+import com.leverx.learn.blogme.rest.dto.articledto.ArticleDto;
+import com.leverx.learn.blogme.rest.dto.articledto.ArticleDtoConverter;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.CommentService;
 import com.leverx.learn.blogme.service.TagService;
@@ -15,14 +14,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * REST controller for {@link Article}.
@@ -114,41 +111,45 @@ public class ArticleController {
         return articleService.findAllArticlesByTags(tags);
     }
 
-
     @GetMapping()
     public List<Article> getArticles(
-            @Nullable @RequestParam("skip") Integer pageNo,
-            @Nullable @RequestParam("limit") Integer pageSize,
-            @Nullable @RequestParam("q") String postTitle,
-            @Nullable @RequestParam("author") Integer authorId,
-            @Nullable @RequestParam("sort") String sortBy,
-            @Nullable @RequestParam("order") String order) {
+            @RequestParam("skip") Integer pageNo,
+            @RequestParam("limit") Integer pageSize,
+            @RequestParam("q") String postTitle,
+            @RequestParam("author") Integer authorId,
+            @RequestParam("sort") String sortBy,
+            @RequestParam("order") String order) {
+        Assert.notNull(pageNo, "pageNo must not be null");
+        Assert.notNull(pageSize, "pageSize must not be null");
+        Assert.hasText(postTitle, "postTitle must not be empty");
+        Assert.notNull(authorId, "authorId must not be null");
+        Assert.hasText(sortBy, "sort must not be empty");
+        Assert.hasText(order, "order must not be empty");
 
-        if (pageNo == null && pageSize == null && postTitle == null && authorId == null && sortBy == null && order == null) {
-            List<Article> publicArticles = articleService.getAllArticles().stream()
-                    .filter(article -> article.getStatus().equals(ArticleStatus.PUBLIC))
-                    .collect(Collectors.toList());
-            return publicArticles;
-        }
         Pageable pageable = getPageable(pageNo, pageSize, sortBy, order);
-        return articleService.findByTitleAndAuthorId(postTitle, authorId, pageable);
+        List<Article> byTitleAndAuthorId = articleService.findByTitleAndAuthorId(postTitle, authorId, pageable);
+        return byTitleAndAuthorId;
     }
 
     @GetMapping("/{id}/comments")
-    public List<Comment> getFilteredAndSortedComments(
+    public List<Comment> getComments(
             @PathVariable Integer id,
-            @Nullable @RequestParam("skip") Integer pageNo,
-            @Nullable @RequestParam("limit") Integer pageSize,
-            @Nullable @RequestParam("author") Integer authorId,
-            @Nullable @RequestParam("sort") String sortBy,
-            @Nullable @RequestParam("order") String order) {
+            @RequestParam("skip") Integer pageNo,
+            @RequestParam("limit") Integer pageSize,
+            @RequestParam("author") Integer authorId,
+            @RequestParam("sort") String sortBy,
+            @RequestParam("order") String order) {
+        Assert.notNull(pageNo, "pageNo must not be null");
+        Assert.notNull(pageSize, "pageSize must not be null");
+        Assert.notNull(authorId, "authorId must not be null");
+        Assert.hasText(sortBy, "sort must not be empty");
+        Assert.hasText(order, "order must not be empty");
 
         Pageable pageable = getPageable(pageNo, pageSize, sortBy, order);
         return commentService.findByArticleIdAndAuthorId(id, authorId, pageable);
     }
 
-    private Pageable getPageable(@RequestParam("skip") Integer pageNo, @RequestParam("limit") Integer pageSize,
-                                 @RequestParam("sort") String sortBy, @RequestParam("order") String order) {
+    private Pageable getPageable(Integer pageNo, Integer pageSize, String sortBy, String order) {
         Sort sort = Sort.by(sortBy).by(Sort.Direction.fromString(order));
         return PageRequest.of(pageNo, pageSize, sort);
     }

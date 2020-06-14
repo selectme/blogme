@@ -119,7 +119,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<Article> findByTitleAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
-        Assert.notNull(postTitle, "postTitle must not be empty");
+        Assert.hasText(postTitle, "postTitle must not be empty");
         Assert.notNull(authorId, "authorId must not be null");
         Assert.notNull(pageable, "pageable must not be null");
 

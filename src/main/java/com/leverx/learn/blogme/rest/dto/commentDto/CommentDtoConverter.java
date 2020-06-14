@@ -1,13 +1,13 @@
-package com.leverx.learn.blogme.dto.commentDto;
+package com.leverx.learn.blogme.rest.dto.commentDto;
 
 import com.leverx.learn.blogme.entity.Comment;
 import com.leverx.learn.blogme.service.UserService;
 import org.springframework.stereotype.Component;
 
 /**
- * @author Viktar on 12.06.2020
- *
  * Allows to convert {@link Comment} into {@link CommentDto} and vice versa.
+ *
+ * @author Viktar on 12.06.2020
  */
 @Component
 public class CommentDtoConverter {

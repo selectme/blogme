@@ -10,6 +10,8 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import java.util.List;
 
 /**
+ * Repository for working with {@link Article}.
+ *
  * @author Viktar on 28.05.2020
  */
 public interface ArticleRepository extends JpaRepository<Article, Integer>, PagingAndSortingRepository<Article, Integer> {

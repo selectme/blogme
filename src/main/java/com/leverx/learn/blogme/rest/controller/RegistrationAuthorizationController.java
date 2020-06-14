@@ -1,9 +1,9 @@
-package com.leverx.learn.blogme.controller;
+package com.leverx.learn.blogme.rest.controller;
 
-import com.leverx.learn.blogme.dto.authenticationDto.AuthenticationRequestDto;
-import com.leverx.learn.blogme.dto.userdto.UserDto;
-import com.leverx.learn.blogme.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.entity.User;
+import com.leverx.learn.blogme.rest.dto.authenticationDto.AuthenticationRequestDto;
+import com.leverx.learn.blogme.rest.dto.userdto.UserDto;
+import com.leverx.learn.blogme.rest.dto.userdto.UserDtoConverter;
 import com.leverx.learn.blogme.security.jwt.JwtTokenProvider;
 import com.leverx.learn.blogme.service.ActivationCodeService;
 import com.leverx.learn.blogme.service.MailService;
@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * REST controller for process of registration, authorization.
+ *
  * @author Viktar on 07.06.2020
  */
 @RestController
@@ -42,14 +44,14 @@ public class RegistrationAuthorizationController {
                                                RegistrationService registrationService, ActivationCodeService codeService,
                                                MailService mailService, BCryptPasswordEncoder passwordEncoder,
                                                AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.jwtTokenProvider = jwtTokenProvider;
         Assert.notNull(userService, "userService must not be null");
         Assert.notNull(userDtoConverter, "userDtoConverter must not be null");
         Assert.notNull(registrationService, "registrationService must not be null");
         Assert.notNull(codeService, "codeService must not be null");
         Assert.notNull(mailService, "mailService must not be null");
         Assert.notNull(passwordEncoder, "passwordEncoder must not be null");
+        Assert.notNull(authenticationManager, "authenticationManager must not be null");
+        Assert.notNull(jwtTokenProvider, "jwtTokenProvider must not be null");
 
         this.userService = userService;
         this.userDtoConverter = userDtoConverter;
@@ -57,6 +59,8 @@ public class RegistrationAuthorizationController {
         this.codeService = codeService;
         this.mailService = mailService;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @PostMapping("/register")
@@ -68,14 +72,14 @@ public class RegistrationAuthorizationController {
 
     @GetMapping("/confirm/{activationCode}")
     public void confirmRegistration(@PathVariable String activationCode) {
-        Assert.notNull(activationCode, "activationCode must not be null");
+        Assert.hasText(activationCode, "activationCode must not be null");
 
         codeService.activateUserByCode(activationCode);
     }
 
     @PostMapping("/forgot_password")
     public void forgotPassword(@RequestBody String email) {
-        Assert.notNull(email, "email must not be empty");
+        Assert.hasText(email, "email must not be empty");
 
         String code = codeService.generateActivationCode(email);
         mailService.send(email, "Password resetting", "use this link for reset password: " + code);
@@ -92,7 +96,7 @@ public class RegistrationAuthorizationController {
 
     @GetMapping("/check_code")
     public ResponseEntity<String> checkCode(@RequestBody String activationCode) {
-        Assert.notNull(activationCode, "activatioCode must not be null");
+        Assert.hasText(activationCode, "activationCode must not be null");
 
         if (codeService.isCodeExists(activationCode)) {
             return new ResponseEntity<>("Activation code is valid", HttpStatus.OK);

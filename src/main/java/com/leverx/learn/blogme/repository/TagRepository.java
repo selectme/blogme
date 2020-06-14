@@ -4,6 +4,8 @@ import com.leverx.learn.blogme.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
+ * Repository for working with {@link Tag}.
+ *
  * @author Viktar on 03.06.2020
  */
 public interface TagRepository extends JpaRepository<Tag, Integer> {

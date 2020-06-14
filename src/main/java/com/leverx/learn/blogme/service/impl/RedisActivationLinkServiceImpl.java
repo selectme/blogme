@@ -76,8 +76,8 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
 
     @Override
     public void resetPassword(String confirmationCode, String newPassword) {
-        Assert.notNull(confirmationCode, "confirmationCode must not be empty");
-        Assert.notNull(newPassword, "password must not be empty");
+        Assert.hasText(confirmationCode, "confirmationCode must not be empty");
+        Assert.hasText(newPassword, "password must not be empty");
 
         if (isCodeExists(confirmationCode)) {
             String email = cache.get(confirmationCode);

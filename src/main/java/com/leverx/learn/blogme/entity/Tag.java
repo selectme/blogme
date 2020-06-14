@@ -7,9 +7,9 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * @author Viktar on 27.05.2020
- *
  * Model object that represents a tag under an article {@link Article}
+ *
+ * @author Viktar on 27.05.2020
  */
 @Entity
 @Table(name = "tags")
@@ -23,7 +23,7 @@ public class Tag {
     @Column(name = "name", unique = true)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags", cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tags", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Article> articles;
 

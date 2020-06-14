@@ -1,4 +1,4 @@
-package com.leverx.learn.blogme.controller;
+package com.leverx.learn.blogme.rest.controller;
 
 import com.leverx.learn.blogme.service.TagService;
 import org.springframework.util.Assert;
@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 
 /**
+ * REST controller for {@link com.leverx.learn.blogme.entity.Tag}
+ *
  * @author Viktar on 27.05.2020
  */
 @RestController
