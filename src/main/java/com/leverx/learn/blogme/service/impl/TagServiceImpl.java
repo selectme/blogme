@@ -12,25 +12,25 @@ import java.util.Map;
 
 /**
  * @author Viktar on 03.06.2020
+ *
+ * Implementation of {@link TagService}
+ *
+ * @see TagService
  */
 @Service
 public class TagServiceImpl implements TagService {
 
-    private static final String TAG_NAME_NOT_EMPTY = "Tag name must not be empty";
-    private static final String TAG_REPOSITORY_NOT_EMPTY = "tagRepository must not be null";
-
     private final TagRepository repository;
 
     public TagServiceImpl(TagRepository repository) {
-        Assert.notNull(repository, TAG_REPOSITORY_NOT_EMPTY);
+        Assert.notNull(repository, "tagRepository must not be null");
 
         this.repository = repository;
     }
 
-
     @Override
     public Tag findByName(String tagName) {
-        Assert.notNull(tagName, TAG_NAME_NOT_EMPTY);
+        Assert.notNull(tagName, "tagName must not be empty");
 
         return repository.findByName(tagName);
     }

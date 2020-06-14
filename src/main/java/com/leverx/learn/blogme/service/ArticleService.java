@@ -67,5 +67,5 @@ public interface ArticleService {
      * @param pageable condition of the pagination.
      * @return list of {@link Article} satisfying the condition.
      */
-    List<Article> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
+    List<Article> findByTitleAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
 }

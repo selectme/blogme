@@ -3,132 +3,153 @@ package com.leverx.learn.blogme.controller;
 import com.leverx.learn.blogme.dto.articledto.ArticleDto;
 import com.leverx.learn.blogme.dto.articledto.ArticleDtoConverter;
 import com.leverx.learn.blogme.entity.Article;
+import com.leverx.learn.blogme.entity.ArticleStatus;
 import com.leverx.learn.blogme.entity.Comment;
+import com.leverx.learn.blogme.entity.User;
 import com.leverx.learn.blogme.service.ArticleService;
 import com.leverx.learn.blogme.service.CommentService;
 import com.leverx.learn.blogme.service.TagService;
+import com.leverx.learn.blogme.service.UserService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
+ * REST controller for {@link Article}.
+ *
  * @author Viktar on 27.05.2020
  */
 @RestController
 @RequestMapping("/articles")
 public class ArticleController {
 
-    private static final String ID_NOT_EMPTY = "Id must not be empty";
-    private static final String ARTICLE_NOT_EMPTY = "Article must not be empty";
-    private static final String TAG_NOT_EMPTY = "Tags must not be empty";
-    private static final String ARTICLE_SERVICE_NOT_EMPTY = "articleService must not be null";
-    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be null";
-    private static final String ARTICLE_DTO_CONVERTER_NOT_EMPTY = "articleDtoConverter must not be null";
-    private static final String COMMENT_SERVICE_NOT_EMPTY = "commentService must not be null";
 
     private final ArticleService articleService;
     private final TagService tagService;
     private final ArticleDtoConverter articleDtoConverter;
     private final CommentService commentService;
+    private final UserService userService;
 
-    public ArticleController(ArticleService articleService, TagService tagService, ArticleDtoConverter articleDtoConverter, CommentService commentService) {
+    public ArticleController(ArticleService articleService, TagService tagService, ArticleDtoConverter articleDtoConverter, CommentService commentService, UserService userService) {
         this.commentService = commentService;
-        Assert.notNull(articleService, ARTICLE_SERVICE_NOT_EMPTY);
-        Assert.notNull(tagService, TAG_SERVICE_NOT_EMPTY);
-        Assert.notNull(articleDtoConverter, ARTICLE_DTO_CONVERTER_NOT_EMPTY);
-        Assert.notNull(commentService, COMMENT_SERVICE_NOT_EMPTY);
+        this.userService = userService;
+        Assert.notNull(articleService, "articleService must not be null");
+        Assert.notNull(tagService, "tagService must not be null");
+        Assert.notNull(articleDtoConverter, "articleDtoConverter must not be null");
+        Assert.notNull(commentService, "commentService must not be null");
+        Assert.notNull(userService, "userService must not be null");
 
         this.articleService = articleService;
         this.tagService = tagService;
         this.articleDtoConverter = articleDtoConverter;
     }
 
-
     @PostMapping
     @ResponseBody
-    public ArticleDto addArticle(@RequestBody Article article) {
-        Assert.notNull(article, ARTICLE_NOT_EMPTY);
+    public ArticleDto addArticle(@RequestBody Article article, Principal principal) {
+        Assert.notNull(article, "article must not be null");
 
+        User user = userService.getUserByEmail(principal.getName());
+        article.setAuthor(user);
         return articleDtoConverter.convertToDto(articleService.addArticle(article));
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ArticleDto getArticle(@PathVariable Integer id) {
-        Assert.notNull(id, ID_NOT_EMPTY);
+        Assert.notNull(id, "id must not be null");
 
         return articleDtoConverter.convertToDto(articleService.getArticleById(id));
     }
 
     @PutMapping("/{id}")
-    public ArticleDto editArticle(@RequestBody Article editedArticle, @PathVariable Integer id) {
-        Assert.notNull(editedArticle, ARTICLE_NOT_EMPTY);
-        Assert.notNull(id, ID_NOT_EMPTY);
+    public ResponseEntity editArticle(@RequestBody Article editedArticle, @PathVariable Integer id, Principal principal) {
+        Assert.notNull(editedArticle, "editedArticle must not be null");
+        Assert.notNull(id, "id must not be null");
 
-        return articleDtoConverter.convertToDto(articleService.editArticle(editedArticle));
+        String userEmail = principal.getName();
+        User user = userService.getUserByEmail(userEmail);
+        if (user.getId().equals(editedArticle.getAuthor().getId())) {
+            return new ResponseEntity(articleDtoConverter.convertToDto(articleService.editArticle(editedArticle)), HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public void deleteArticle(@PathVariable Integer id) {
-        Assert.notNull(id, ID_NOT_EMPTY);
+    public ResponseEntity deleteArticle(@PathVariable Integer id, Principal principal) {
+        Assert.notNull(id, "id must not be null");
 
-        articleService.deleteArticle(id);
+        User user = userService.getUserByEmail(principal.getName());
+        Article article = articleService.getArticleById(id);
+        if (user.getId().equals(article.getAuthor().getId())) {
+            articleService.deleteArticle(id);
+            return new ResponseEntity(HttpStatus.OK);
+        } else {
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
+    }
+
+    @GetMapping("/my")
+    public ResponseEntity getAuthorsArticles(Principal principal) {
+        User user = userService.getUserByEmail(principal.getName());
+
+        return new ResponseEntity(user.getArticles(), HttpStatus.OK);
     }
 
     @GetMapping(params = "tags")
-    public Set<Article> getArticlesByTags(@RequestParam(value = "tags") List<String> tags) {
-        Assert.notEmpty(tags, TAG_NOT_EMPTY);
+    public Set<Article> getArticlesByTags(@RequestParam("tags") List<String> tags) {
+        Assert.notEmpty(tags, "tags must not be null");
+
         return articleService.findAllArticlesByTags(tags);
     }
 
-    @GetMapping
-    public List<Article> getAllArticles() {
-        return articleService.getAllArticles();
-    }
 
-    @GetMapping
-    List<Article> getFilteredAndSortedArticles(
-            @RequestParam(value = "skip") Integer pageNo,
-            @RequestParam(value = "limit") Integer pageSize,
-            @RequestParam(value = "q") String postTitle,
-            @RequestParam(value = "author") Integer authorId,
-            @RequestParam(value = "sort") String sortBy,
-            @RequestParam(value = "order") String order) {
+    @GetMapping()
+    public List<Article> getArticles(
+            @Nullable @RequestParam("skip") Integer pageNo,
+            @Nullable @RequestParam("limit") Integer pageSize,
+            @Nullable @RequestParam("q") String postTitle,
+            @Nullable @RequestParam("author") Integer authorId,
+            @Nullable @RequestParam("sort") String sortBy,
+            @Nullable @RequestParam("order") String order) {
 
-        Sort sort = Sort.by(sortBy).descending();
-        if(order.equals("asc")){
-            sort.ascending();
+        if (pageNo == null && pageSize == null && postTitle == null && authorId == null && sortBy == null && order == null) {
+            List<Article> publicArticles = articleService.getAllArticles().stream()
+                    .filter(article -> article.getStatus().equals(ArticleStatus.PUBLIC))
+                    .collect(Collectors.toList());
+            return publicArticles;
         }
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        return articleService.findByTitleAndAndAuthorId(postTitle, authorId, pageable);
+        Pageable pageable = getPageable(pageNo, pageSize, sortBy, order);
+        return articleService.findByTitleAndAuthorId(postTitle, authorId, pageable);
     }
 
     @GetMapping("/{id}/comments")
-    List<Comment> getFilteredAndSortedComments(
+    public List<Comment> getFilteredAndSortedComments(
             @PathVariable Integer id,
-            @RequestParam(value = "skip") Integer pageNo,
-            @RequestParam(value = "limit") Integer pageSize,
-            @RequestParam(value = "q") String postTitle,
-            @RequestParam(value = "author") Integer authorId,
-            @RequestParam(value = "sort") String sortBy,
-            @RequestParam(value = "order") String order) {
+            @Nullable @RequestParam("skip") Integer pageNo,
+            @Nullable @RequestParam("limit") Integer pageSize,
+            @Nullable @RequestParam("author") Integer authorId,
+            @Nullable @RequestParam("sort") String sortBy,
+            @Nullable @RequestParam("order") String order) {
 
-        Sort sort = Sort.by(sortBy).descending();
-        if(order.equals("asc")){
-            sort.ascending();
-        }
-
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
-
-        return commentService.findByTitleAndAndAuthorId(postTitle, authorId, pageable);
+        Pageable pageable = getPageable(pageNo, pageSize, sortBy, order);
+        return commentService.findByArticleIdAndAuthorId(id, authorId, pageable);
     }
 
-
+    private Pageable getPageable(@RequestParam("skip") Integer pageNo, @RequestParam("limit") Integer pageSize,
+                                 @RequestParam("sort") String sortBy, @RequestParam("order") String order) {
+        Sort sort = Sort.by(sortBy).by(Sort.Direction.fromString(order));
+        return PageRequest.of(pageNo, pageSize, sort);
+    }
 }

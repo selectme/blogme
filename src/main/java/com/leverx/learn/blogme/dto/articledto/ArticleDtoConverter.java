@@ -5,10 +5,11 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Viktar on 05.06.2020
+ *
+ * Allows to convert {@link Article} into {@link ArticleDto} and vice versa.
  */
 @Component
 public class ArticleDtoConverter {
-
 
     public ArticleDto convertToDto(Article article) {
 
@@ -23,7 +24,6 @@ public class ArticleDtoConverter {
 
         return articleDto;
     }
-
 
     public Article convertToEntity(ArticleDto articleDto) {
 

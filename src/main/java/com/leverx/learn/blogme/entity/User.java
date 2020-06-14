@@ -50,11 +50,6 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "author")
     private Set<Comment> comments;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private Set<Role> roles;
-
     public User() {
     }
 
@@ -128,14 +123,6 @@ public class User {
 
     public void setEnabled(boolean enabled) {
         isEnabled = enabled;
-    }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
     }
 
     @Override

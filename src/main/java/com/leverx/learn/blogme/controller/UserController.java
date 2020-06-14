@@ -18,12 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/users")
 public class UserController {
 
-    private static final String ID_NOT_EMPTY = "Id must not be empty";
-    private static final String USER_SERVICE_NOT_EMPTY = "userService must not be null";
-    private static final String USER_DTO_CONVERTER_NOT_EMPTY = "userDtoConverter must not be null";
-    private static final String CODE_SERVICE_NOT_EMPTY = "codeService must not be null";
-    private static final String MAIL_SERVICE_NOT_EMPTY = "mailService must not be null";
-
     private final UserService userService;
     private final UserDtoConverter userDtoConverter;
     private final ActivationCodeService codeService;
@@ -31,10 +25,10 @@ public class UserController {
 
     public UserController(UserService userService, UserDtoConverter userDtoConverter,
                           ActivationCodeService codeService, MailService mailService) {
-        Assert.notNull(userService, USER_SERVICE_NOT_EMPTY);
-        Assert.notNull(userDtoConverter, USER_DTO_CONVERTER_NOT_EMPTY);
-        Assert.notNull(codeService, CODE_SERVICE_NOT_EMPTY);
-        Assert.notNull(mailService, MAIL_SERVICE_NOT_EMPTY);
+        Assert.notNull(userService, "userService must not be null");
+        Assert.notNull(userDtoConverter, "userDtoConverter must not be null");
+        Assert.notNull(codeService, "codeService must not be null");
+        Assert.notNull(mailService, "mailService must not be null");
 
         this.userService = userService;
         this.userDtoConverter = userDtoConverter;
@@ -44,7 +38,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public UserDto getUser(@PathVariable Integer id) {
-        Assert.notNull(id, ID_NOT_EMPTY);
+        Assert.notNull(id, "id must not be null");
 
         return userDtoConverter.convertToDto(userService.getUserById(id));
     }

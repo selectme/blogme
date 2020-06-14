@@ -13,14 +13,4 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan("com.leverx.learn.blogme")
 public class WebConfig implements WebMvcConfigurer {
 
-
-//
-//    @Override
-//    protected void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-//        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-//        converter.setObjectMapper(new ObjectMapper());
-////        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
-//        converters.add(converter);
-//    }
-
 }

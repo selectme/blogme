@@ -16,7 +16,6 @@ import java.util.Properties;
 @PropertySource("classpath:mail.properties")
 public class MailConfig {
 
-
     @Value("${mail.transport.protocol}")
     private String protocol;
 
@@ -38,12 +37,9 @@ public class MailConfig {
     @Value("${mail.debug}")
     private String debug;
 
-
-
     @Bean
     public JavaMailSender getMailSender(){
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-
 
         javaMailSender.setHost(host);
         javaMailSender.setPort(port);
@@ -54,7 +50,6 @@ public class MailConfig {
         Properties mailProperties = javaMailSender.getJavaMailProperties();
         mailProperties.put("mail.transport.protocol", protocol);
         mailProperties.put("mail.debug", debug);
-//        mailProperties.put("mail.smtp.ssl.enable", "true");
         mailProperties.put("mail.smtp.ssl.checkserveridentity", "false");
         mailProperties.put("mail.smtp.starttls.enable", "true");
         mailProperties.put("mail.smtp.auth", "true");
@@ -62,8 +57,5 @@ public class MailConfig {
         mailProperties.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         return javaMailSender;
     }
-
-
-
 
 }

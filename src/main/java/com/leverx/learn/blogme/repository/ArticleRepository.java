@@ -16,6 +16,6 @@ public interface ArticleRepository extends JpaRepository<Article, Integer>, Pagi
 
     List<Article> findByTagsContains(Tag tag);
 
-    Slice<Article> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
+    Slice<Article> findByTitleAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
 
 }

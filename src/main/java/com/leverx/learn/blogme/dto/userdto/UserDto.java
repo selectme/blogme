@@ -7,6 +7,8 @@ import java.util.Set;
 
 /**
  * @author Viktar on 31.05.2020
+ *
+ * Model data transfer object of {@link com.leverx.learn.blogme.entity.User}
  */
 public class UserDto {
 
@@ -69,12 +71,9 @@ public class UserDto {
         this.email = email;
     }
 
-//    @JsonIgnore
     public String getPassword() {
         return password;
     }
-
-
 
     public void setPassword(String password) {
         this.password = password;

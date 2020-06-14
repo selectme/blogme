@@ -1,7 +1,6 @@
 package com.leverx.learn.blogme.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +13,7 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.util.Assert;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
+ * Spring configuration for working with database.
+ *
  * @author Viktar on 27.05.2020
  */
 @Configuration
@@ -30,15 +32,13 @@ import java.util.Properties;
 @PropertySource("classpath:db.properties")
 public class DatabaseConfig {
 
-
     private static final String ENTITY_PACKAGE = "com.leverx.learn.blogme.entity";
     private static final String HIBERNATE_PROPERTIES = "hibernate.properties";
 
+    private final Environment env;
 
-    private Environment env;
-
-    @Autowired
     public DatabaseConfig(Environment env) {
+        Assert.notNull(env, "Environment must not be null");
         this.env = env;
     }
 
@@ -51,17 +51,6 @@ public class DatabaseConfig {
         em.setJpaProperties(getHibernateProperties());
 
         return em;
-    }
-
-    private Properties getHibernateProperties() {
-        Properties properties = new Properties();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(HIBERNATE_PROPERTIES);
-        try {
-            properties.load(inputStream);
-            return properties;
-        } catch (IOException e) {
-            throw new IllegalArgumentException("There is no hibernate.properties in classpath");
-        }
     }
 
     @Bean
@@ -84,7 +73,18 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private Properties getHibernateProperties() {
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(HIBERNATE_PROPERTIES);
+        try {
+            properties.load(inputStream);
+            return properties;
+        } catch (IOException e) {
+            throw new IllegalArgumentException("There is no hibernate.properties in classpath");
+        }
     }
 }

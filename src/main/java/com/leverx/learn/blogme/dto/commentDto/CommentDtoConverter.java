@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Viktar on 12.06.2020
+ *
+ * Allows to convert {@link Comment} into {@link CommentDto} and vice versa.
  */
 @Component
 public class CommentDtoConverter {

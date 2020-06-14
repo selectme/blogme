@@ -14,24 +14,22 @@ import java.util.List;
 
 /**
  * @author Viktar on 08.06.2020
+ *
+ * Implementation of {@link CommentService}
+ *
+ * @see CommentService
  */
 @Service
 public class CommentServiceImpl implements CommentService {
-
-    private static final String ARTICLE_ID_NOT_EMPTY = "Article id must not be empty";
-    private static final String COMMENT_ID_NOT_EMPTY = "Id must not be empty";
-    private static final String ARTICLE_SERVICE_NOT_EMPTY = "articleService must not be null";
-    private static final String COMMENT_REPOSITORY_NOT_EMPTY = "commentRepository must not be null";
-    private static final String ARTICLE_REPOSITORY_NOT_EMPTY = "articleRepository must not be null";
 
     private final ArticleService articleService;
     private final CommentRepository commentRepository;
     private final ArticleRepository articleRepository;
 
     public CommentServiceImpl(ArticleService articleService, CommentRepository commentRepository, ArticleRepository articleRepository) {
-        Assert.notNull(articleService, ARTICLE_SERVICE_NOT_EMPTY);
-        Assert.notNull(commentRepository, COMMENT_REPOSITORY_NOT_EMPTY);
-        Assert.notNull(articleRepository, ARTICLE_REPOSITORY_NOT_EMPTY);
+        Assert.notNull(articleService, "articleService must not be null");
+        Assert.notNull(commentRepository, "commentRepository must not be null");
+        Assert.notNull(articleRepository, "articleRepository must not be null");
 
         this.articleService = articleService;
         this.commentRepository = commentRepository;
@@ -40,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getCommentsByPostId(Integer articleId) {
-        Assert.notNull(articleId, ARTICLE_ID_NOT_EMPTY);
+        Assert.notNull(articleId, "articleId must not be null");
 
         return articleService.getArticleById(articleId).getComments();
     }
@@ -54,21 +52,23 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment getComment(Integer commentId) {
-        Assert.notNull(commentId, COMMENT_ID_NOT_EMPTY);
+        Assert.notNull(commentId, "commentId must not be null");
 
         return commentRepository.getOne(commentId);
     }
 
     @Override
     public void removeComment(Integer commentId) {
-        Assert.notNull(commentId, COMMENT_ID_NOT_EMPTY);
+        Assert.notNull(commentId, "commentId must not be null");
 
         commentRepository.deleteById(commentId);
     }
 
     @Override
-    public List<Comment> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
-        Slice<Comment> commentSlice = commentRepository.findByArticleAndAuthorId(postTitle, authorId, pageable);
+    public List<Comment> findByArticleIdAndAuthorId(Integer articleId, Integer authorId, Pageable pageable) {
+        Slice<Comment> commentSlice = commentRepository.findByArticleIdAndAuthorId(articleId, authorId, pageable);
         return commentSlice.getContent();
     }
 }
+
+

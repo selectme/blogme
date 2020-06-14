@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Viktar on 09.06.2020
+ *
+ * Model data transfer object that contains parameters for authentication.
  */
 @Component
 public class AuthenticationRequestDto {

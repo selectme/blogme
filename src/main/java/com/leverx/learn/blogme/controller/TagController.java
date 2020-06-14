@@ -13,12 +13,10 @@ import java.util.Map;
 @RestController
 public class TagController {
 
-    private static final String TAG_SERVICE_NOT_EMPTY = "tagService must not be null";
-
     private final TagService tagService;
 
     public TagController(TagService tagService) {
-        Assert.notNull(tagService, TAG_SERVICE_NOT_EMPTY);
+        Assert.notNull(tagService, "requestDto must not be null");
 
         this.tagService = tagService;
     }

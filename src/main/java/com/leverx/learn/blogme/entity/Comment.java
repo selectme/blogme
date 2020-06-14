@@ -24,7 +24,6 @@ public class Comment {
     @Column(name = "text", columnDefinition = "text")
     private String text;
 
-
     /**
      * {@link Article}
      */

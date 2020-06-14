@@ -29,19 +29,4 @@ public class AppInitializer implements WebApplicationInitializer {
         appServlet.setLoadOnStartup(1);
         appServlet.addMapping("/");
     }
-
-//    @Override
-//    protected Class<?>[] getRootConfigClasses() {
-//        return new Class[]{WebConfig.class, DatabaseConfig.class};
-//    }
-//
-//    @Override
-//    protected Class<?>[] getServletConfigClasses() {
-//        return new Class[0];
-//    }
-//
-//    @Override
-//    protected String[] getServletMappings() {
-//        return new String[]{"/"};
-//    }
 }

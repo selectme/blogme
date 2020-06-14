@@ -18,6 +18,10 @@ import java.util.Set;
 
 /**
  * @author Viktar on 28.05.2020
+ *
+ * Implementation of {@link ArticleService}
+ *
+ * @see ArticleService
  */
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -114,8 +118,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
-        Slice<Article> articleSlice = articleRepository.findByTitleAndAndAuthorId(postTitle, authorId, pageable);
+    public List<Article> findByTitleAndAuthorId(String postTitle, Integer authorId, Pageable pageable) {
+        Assert.notNull(postTitle, "postTitle must not be empty");
+        Assert.notNull(authorId, "authorId must not be null");
+        Assert.notNull(pageable, "pageable must not be null");
+
+        Slice<Article> articleSlice = articleRepository.findByTitleAndAuthorId(postTitle, authorId, pageable);
         return articleSlice.getContent();
     }
 }

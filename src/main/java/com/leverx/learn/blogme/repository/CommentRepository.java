@@ -11,5 +11,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface CommentRepository extends JpaRepository<Comment, Integer>, PagingAndSortingRepository<Comment, Integer> {
 
-    Slice<Comment> findByArticleAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
+    Slice<Comment> findByArticleIdAndAuthorId(Integer articleId, Integer authorId, Pageable pageable);
 }

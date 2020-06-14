@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * @author Viktar on 31.05.2020
+ *
+ * Allows to convert {@link User} into {@link UserDto} and vice versa.
  */
 @Component
 public class UserDtoConverter {
@@ -13,7 +15,7 @@ public class UserDtoConverter {
 
         UserDto userDto = new UserDto();
 
-//        userDto.setId(user.getId());
+        userDto.setId(user.getId());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());

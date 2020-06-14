@@ -9,19 +9,18 @@ import org.springframework.util.Assert;
 
 /**
  * @author Viktar on 07.06.2020
+ *
+ * Implementation of {@link MailService}
+ *
+ * @see MailService
  */
 @Service
 public class MailSenderServiceImpl implements MailService {
 
-    private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
-    private static final String SUBJECT_NOT_EMPTY = "Subject must not be empty";
-    private static final String MESSAGE_NOT_EMPTY = "Message must not be empty";
-    private static final String MAIL_SENDER_NOT_EMPTY = "Message must not be null";
-
     private final JavaMailSender javaMailSender;
 
     public MailSenderServiceImpl(JavaMailSender javaMailSender) {
-        Assert.notNull(javaMailSender, MAIL_SENDER_NOT_EMPTY);
+        Assert.notNull(javaMailSender, "mailSender must not be null");
 
         this.javaMailSender = javaMailSender;
     }
@@ -31,9 +30,9 @@ public class MailSenderServiceImpl implements MailService {
 
     @Override
     public void send(String emailTo, String subject, String message){
-        Assert.notNull(emailTo, EMAIL_NOT_EMPTY);
-        Assert.notNull(subject, SUBJECT_NOT_EMPTY);
-        Assert.notNull(message, MESSAGE_NOT_EMPTY);
+        Assert.notNull(emailTo, "emailTo must not be empty");
+        Assert.notNull(subject, "subject must not be empty");
+        Assert.notNull(message, "message must not be empty");
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(user);

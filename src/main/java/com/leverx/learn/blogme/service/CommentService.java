@@ -51,6 +51,6 @@ public interface CommentService {
      * @param pageable condition of the pagination.
      * @return  list of {@link Comment} satisfying the condition.
      */
-    List<Comment> findByTitleAndAndAuthorId(String postTitle, Integer authorId, Pageable pageable);
+    List<Comment> findByArticleIdAndAuthorId(Integer articleId, Integer authorId, Pageable pageable);
 
 }

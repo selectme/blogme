@@ -13,19 +13,16 @@ import java.util.Date;
 
 /**
  * @author Viktar on 07.06.2020
+ *
+ * Implementation of {@link RegistrationService}
+ *
+ * @see RegistrationService
  */
 @Service
 public class RegistrationServiceImpl implements RegistrationService {
 
     private static final String EMAIL_SUBJECT = "Activation link";
     private static final String EMAIL_ACTIVATION_MESSAGE = "http://localhost:8080/auth/confirm/";
-    private static final String USER_NOT_EMPTY = "User must not be empty";
-    private static final String CONFIRMATION_CODE_NOT_EMPTY = "Confirmation code must not be empty";
-    private static final String CODE_SERVICE_NOT_EMPTY = "activationCode code must not be null";
-    private static final String USER_SERVICE_NOT_EMPTY = "userService code must not be null";
-    private static final String MAIL_SERVICE_NOT_EMPTY = "mailService code must not be null";
-    private static final String PASSWORD_ENCODER_NOT_EMPTY = "passwordEncoder must not be null";
-
 
     private final UserService userService;
     private final ActivationCodeService codeService;
@@ -34,10 +31,10 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     public RegistrationServiceImpl(UserService userService, ActivationCodeService codeService,
                                    MailService mailService, PasswordEncoder passwordEncoder) {
-        Assert.notNull(userService, USER_SERVICE_NOT_EMPTY);
-        Assert.notNull(codeService, CODE_SERVICE_NOT_EMPTY);
-        Assert.notNull(mailService, MAIL_SERVICE_NOT_EMPTY);
-        Assert.notNull(passwordEncoder, PASSWORD_ENCODER_NOT_EMPTY);
+        Assert.notNull(userService, "userService must not be null");
+        Assert.notNull(codeService, "codeService must not be null");
+        Assert.notNull(mailService, "mailService must not be null");
+        Assert.notNull(passwordEncoder, "passwordEncoder must not be null");
 
         this.userService = userService;
         this.codeService = codeService;
@@ -47,7 +44,7 @@ public class RegistrationServiceImpl implements RegistrationService {
 
     @Override
     public User registerUser(User user) {
-        Assert.notNull(user, USER_NOT_EMPTY);
+        Assert.notNull(user, "user must not be null");
 
         if (userService.getUserByEmail(user.getEmail()) == null) {
             codeService.generateActivationCode(user.getEmail());
@@ -61,6 +58,4 @@ public class RegistrationServiceImpl implements RegistrationService {
             throw new IllegalStateException("Email " + user.getEmail() + " has already registered");
         }
     }
-
-
 }

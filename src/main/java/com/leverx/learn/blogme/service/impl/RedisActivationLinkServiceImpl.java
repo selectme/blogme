@@ -10,35 +10,33 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Viktar on 06.06.2020
+ *
+ * Implementation of {@link ActivationCodeService}
+ *
+ * @see ActivationCodeService
  */
 @Service
 public class RedisActivationLinkServiceImpl implements ActivationCodeService {
-
-    private static final String ACTIVATION_CODE_NOT_EMPTY = "Activation code must not be empty";
-    private static final String REDIS_CLIENT_NOT_EMPTY = "Redis client must not be null";
-    private static final String USER_REPOSITORY_NOT_EMPTY = "Redis client must not be null";
-    private static final String EMAIL_NOT_EMPTY = "Email must not be empty";
-    private static final String PASSWORD_NOT_EMPTY = "Password must not be empty";
 
     private final RMapCache<String, String> cache;
     private final UserRepository userRepository;
 
     public RedisActivationLinkServiceImpl(RedissonClient redissonClient, UserRepository userRepository) {
-        Assert.notNull(redissonClient, REDIS_CLIENT_NOT_EMPTY);
-        Assert.notNull(userRepository, USER_REPOSITORY_NOT_EMPTY);
-
-//        this.cache = redissonClient.getLocalCachedMap("activation-codes", LocalCachedMapOptions.defaults()));
+        Assert.notNull(redissonClient, "redissconClient must not be null");
+        Assert.notNull(userRepository, "userRepository must not be null");
         this.cache = redissonClient.getMapCache("activation-codes");
+        this.cache.expire(24, TimeUnit.HOURS);
         this.userRepository = userRepository;
     }
 
 
     @Override
     public String activateUserByCode(String code) {
-        Assert.notNull(code, ACTIVATION_CODE_NOT_EMPTY);
+        Assert.notNull(code, "code must not be empty");
 
         String email = cache.get(code);
         if (!StringUtils.isEmpty(email)) {
@@ -61,7 +59,7 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
 
     @Override
     public String generateActivationCode(String email) {
-        Assert.notNull(email, EMAIL_NOT_EMPTY);
+        Assert.notNull(email, "email must not be empty");
 
         String activationCode = UUID.randomUUID().toString();
         cache.put(activationCode, email);
@@ -71,15 +69,15 @@ public class RedisActivationLinkServiceImpl implements ActivationCodeService {
 
     @Override
     public boolean isCodeExists(String code) {
-        Assert.notNull(code, ACTIVATION_CODE_NOT_EMPTY);
+        Assert.notNull(code, "code must not be empty");
 
         return cache.containsKey(code);
     }
 
     @Override
     public void resetPassword(String confirmationCode, String newPassword) {
-        Assert.notNull(confirmationCode, ACTIVATION_CODE_NOT_EMPTY);
-        Assert.notNull(newPassword, PASSWORD_NOT_EMPTY);
+        Assert.notNull(confirmationCode, "confirmationCode must not be empty");
+        Assert.notNull(newPassword, "password must not be empty");
 
         if (isCodeExists(confirmationCode)) {
             String email = cache.get(confirmationCode);

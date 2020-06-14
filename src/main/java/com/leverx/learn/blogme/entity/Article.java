@@ -1,7 +1,6 @@
 package com.leverx.learn.blogme.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.leverx.learn.blogme.ArticleStatus;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Proxy;
 
@@ -35,7 +34,7 @@ public class Article {
      * Status of an article. Possible values are PUBLIC and DRAFT.
      */
     @Enumerated(EnumType.STRING)
-    @Column(name = "status")
+    @Column(name = "status", columnDefinition = "enum")
     private ArticleStatus status;
 
     /**
