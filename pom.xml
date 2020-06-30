@@ -25,6 +25,8 @@
         <modelmapper.version>2.3.7</modelmapper.version>
         <jedis.version>3.3.0</jedis.version>
         <jjwt.version>0.9.1</jjwt.version>
+        <mail.version>1.4.6</mail.version>
+        <redisson.version>3.13.0</redisson.version>
     </properties>
 
     <dependencies>
@@ -123,13 +125,13 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4.6</version>
+            <version>${mail.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.13.0</version>
+            <version>${redisson.version}</version>
         </dependency>
 
     </dependencies>
